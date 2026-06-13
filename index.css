@@ -4,7 +4,7 @@
 }
 
 .main-text-area-container {
-    display: flex;
+    display: grid;
     align-items: center;
     justify-items: center;
     padding: 10px;
@@ -27,6 +27,8 @@
 
 #main-board {
     display: grid;
-    gap: 10px;
+
+    grid-auto-flow: column;
+    gap: 5px;
     padding: 10px;
 }
