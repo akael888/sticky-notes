@@ -2,7 +2,7 @@ const localStorageNotesData = JSON.parse(
   localStorage.getItem("WEB_DIARY_NOTES"),
 );
 
-const defaultNotes = localStorageNotesData
+let defaultNotes = localStorageNotesData
   ? localStorageNotesData
   : [
       { notesID: 0, notesMsg: "ABC", notesTimeStamp: 1776085680 },
@@ -15,6 +15,7 @@ const mainBoard = document.getElementById("main-board");
 function updateDefaultNotes(e) {
   const newDiv = document.createElement("div");
   newDiv.className = "sticky-notes";
+  newDiv.id = `${e.notesID}`;
   newDiv.textContent = e.notesMsg;
 
   const deleteButton = document.createElement("button");
@@ -22,7 +23,17 @@ function updateDefaultNotes(e) {
   deleteButton.className = "deleteNote";
   deleteButton.style.display = "none";
 
-  newDiv.appendChild(deleteButton);
+  deleteButton.addEventListener("click", (e) => {
+    parentDiv = deleteButton.closest("div");
+    parentId = parentDiv.id;
+    parentDiv.remove();
+
+    const updatedData = defaultNotes.filter((data) => data.notesID != parentId);
+    defaultNotes = updatedData;
+    localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
+  });
+
+  newDiv.append(deleteButton);
   localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
   mainBoard.append(newDiv);
 }
@@ -42,6 +53,7 @@ function addNewStickyNote() {
 defaultNotes.map((e) => {
   const newDiv = document.createElement("div");
   newDiv.className = "sticky-notes";
+  newDiv.id = `${e.notesID}`;
   newDiv.textContent = e.notesMsg;
 
   const deleteButton = document.createElement("button");
@@ -49,7 +61,17 @@ defaultNotes.map((e) => {
   deleteButton.className = "deleteNote";
   deleteButton.style.display = "none";
 
-  newDiv.appendChild(deleteButton);
+  deleteButton.addEventListener("click", (e) => {
+    parentDiv = deleteButton.closest("div");
+    parentId = parentDiv.id;
+    parentDiv.remove();
+
+    const updatedData = defaultNotes.filter((data) => data.notesID != parentId);
+    defaultNotes = updatedData;
+    localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
+  });
+
+  newDiv.append(deleteButton);
 
   mainBoard.append(newDiv);
 });
@@ -86,7 +108,7 @@ stickyNotes.forEach((note) => {
     delButtonInside.style.display = "flex";
   });
 
-  note.addEventListener("mouseout", (event) => {
+  note.addEventListener("mouseleave", (event) => {
     const delButtonInside = note.querySelector(".deleteNote");
     delButtonInside.style.display = "none";
   });
