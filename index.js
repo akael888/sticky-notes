@@ -5,9 +5,27 @@ const localStorageNotesData = JSON.parse(
 let defaultNotes = localStorageNotesData
   ? localStorageNotesData
   : [
-      { notesID: 0, notesMsg: "ABC", notesTimeStamp: 1776085680 },
-      { notesID: 1, notesMsg: "yes", notesTimeStamp: 1776085680 },
-      { notesID: 2, notesMsg: "Test 1234", notesTimeStamp: 1776085680 },
+      {
+        notesID: 0,
+        notesMsg: "ABC",
+        notesTimeStamp: 1776085680,
+        left: 0,
+        top: 0,
+      },
+      {
+        notesID: 1,
+        notesMsg: "yes",
+        notesTimeStamp: 1776085680,
+        left: 0,
+        top: 0,
+      },
+      {
+        notesID: 2,
+        notesMsg: "Test 1234",
+        notesTimeStamp: 1776085680,
+        left: 0,
+        top: 0,
+      },
     ];
 
 const mainBoard = document.getElementById("main-board");
@@ -66,6 +84,65 @@ defaultNotes.map((e) => {
 
   newDiv.className = "sticky-notes";
   newDiv.id = `${e.notesID}`;
+  newDiv.style.left = `${e.left}px`;
+  newDiv.style.top = `${e.top}px`;
+
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteButton.className = "deleteNote";
+  deleteButton.style.display = "none";
+
+  deleteButton.addEventListener("click", (e) => {
+    parentDiv = deleteButton.closest("div");
+    parentId = parentDiv.id;
+    parentDiv.remove();
+
+    const updatedData = defaultNotes.filter((data) => data.notesID != parentId);
+    defaultNotes = updatedData;
+    localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
+  });
+
+  //Make Sticky Notes Draggable
+  let offsetX = 0;
+  let offsetY = 0;
+  newDiv.addEventListener("pointerdown", (e) => {
+    if (e.target === newInput || e.target === deleteButton) return;
+    e.preventDefault();
+    // Calculate cursor position relative to the element's position from top left
+    offsetX = e.clientX - newDiv.offsetLeft;
+    offsetY = e.clientY - newDiv.offsetTop;
+
+    document.addEventListener("pointermove", pointerMove);
+    document.addEventListener("pointerup", pointerUp);
+
+    function pointerMove(e) {
+      let newX = e.clientX - offsetX;
+      let newY = e.clientY - offsetY;
+
+      newDiv.style.left = `${newX}px`;
+      newDiv.style.top = `${newY}px`;
+
+      const changedNote = defaultNotes.find(
+        (note) => note.notesID === Number(newDiv.id),
+      );
+      if (changedNote) {
+        changedNote.left = newX;
+        changedNote.top = newY;
+
+        // alert(defaultNotes[newDiv.id].notesMsg);
+        // localStorage.setItem("");
+        localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+
+        // alert(changedNote.notesMsg);
+        // updateDefaultNotes(changedNote);
+      }
+    }
+
+    function pointerUp() {
+      document.removeEventListener("pointermove", pointerMove);
+      document.removeEventListener("pointerup", pointerUp);
+    }
+  });
 
   newDiv.addEventListener("mouseenter", (e) => {
     newInput.style.display = "flex";
@@ -95,28 +172,12 @@ defaultNotes.map((e) => {
     }
   });
 
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  deleteButton.className = "deleteNote";
-  deleteButton.style.display = "none";
-
-  deleteButton.addEventListener("click", (e) => {
-    parentDiv = deleteButton.closest("div");
-    parentId = parentDiv.id;
-    parentDiv.remove();
-
-    const updatedData = defaultNotes.filter((data) => data.notesID != parentId);
-    defaultNotes = updatedData;
-    localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
-  });
-
   newDiv.append(deleteButton);
 
   mainBoard.insertBefore(newDiv, newNoteDiv);
 });
 
 const newDiv = document.createElement("div");
-
 // defaultElement.textContent = defaultNotes[0].notesMsg;
 
 const form = document.getElementById("newNoteForm");

@@ -34,7 +34,11 @@
     width: 100px;
     height: 100px;
     text-align: center;
-
+    position: absolute;
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+    box-shadow: 5px 5px 1px 1px rgb(80, 67, 27)
 }
 
 .sticky-input {
@@ -45,8 +49,10 @@
 
 #main-board {
     display: grid;
-
+    position: relative;
     grid-auto-flow: column;
     gap: 5px;
     padding: 10px;
 }
+
+#new-note {left: 200px;}
