@@ -81,6 +81,15 @@ function updateDefaultNotes(e) {
   let offsetX = 0;
   let offsetY = 0;
 
+  const textArea = document.getElementById("post-text");
+
+  textArea.addEventListener("mouseenter", (e) => {
+    //Focus on Text Area for Post on Mouse Hover
+    textArea.focus();
+  });
+  
+  console.log(textArea);
+
   newNoteDiv.addEventListener("pointerdown", (e) => {
     if (e.target === newInput || e.target === deleteButton) return;
     e.preventDefault();
