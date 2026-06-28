@@ -29,6 +29,8 @@
 
 .sticky-notes {
     border: 1px;
+    overflow-wrap: break-word;
+    word-break: break-word;
     background: rgb(255, 233, 167);
     padding: 10px;
     width: 100px;
@@ -46,6 +48,13 @@
     max-width: 100%;
     background-color: transparent;
     text-align: left;
+    text-overflow: clip
+}
+
+.sticky-text {
+    max-width: 100%;
+    text-align: left;
+    text-overflow: ellipsis;
 }
 
 #main-board {
