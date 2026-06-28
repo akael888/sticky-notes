@@ -6,7 +6,27 @@ const localStorageNewNoteLocation = JSON.parse(
   localStorage.getItem("NEW_NOTES_LOCATION"),
 );
 
-const newNoteDiv = document.getElementById("new-note");
+const mainBoard = document.getElementById("main-board");
+
+// Created New Note Div foR Injection
+const newNoteDiv = document.createElement("div");
+newNoteDiv.className = "sticky-notes";
+newNoteDiv.id = "new-note";
+const newNoteForm = document.createElement("form");
+newNoteForm.id = "newNoteForm";
+const newNoteInputContainer = document.createElement("div");
+newNoteInputContainer.className = "main-text-area-container";
+const newNoteTextArea = document.createElement("textarea");
+newNoteTextArea.id = "post-text";
+const newNoteButton = document.createElement("button");
+newNoteButton.id = "post-button";
+newNoteButton.textContent = "+";
+
+newNoteInputContainer.appendChild(newNoteTextArea);
+newNoteForm.appendChild(newNoteInputContainer);
+newNoteForm.appendChild(newNoteButton);
+newNoteDiv.appendChild(newNoteForm);
+mainBoard.appendChild(newNoteDiv);
 
 let defaultNotes = localStorageNotesData
   ? localStorageNotesData
@@ -33,8 +53,6 @@ let defaultNotes = localStorageNotesData
         top: 0,
       },
     ];
-
-const mainBoard = document.getElementById("main-board");
 
 function updateDefaultNotes(e) {
   const newDiv = document.createElement("div");
@@ -278,8 +296,10 @@ postText.addEventListener("keydown", function (e) {
 // });
 
 function addNewStickyNote(e) {
-  const newNoteDiv = document.getElementById("new-note");
   e.preventDefault();
+
+  const newNoteDiv = document.getElementById("new-note");
+
   // alert(postText.value);
 
   const newStickyNote = {
