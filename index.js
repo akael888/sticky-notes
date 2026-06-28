@@ -57,14 +57,18 @@ let defaultNotes = localStorageNotesData
 function updateDefaultNotes(e) {
   const newDiv = document.createElement("div");
   const newText = document.createElement("text");
-  const newInput = document.createElement("input");
+  const newTextArea = document.createElement("textarea");
 
   newText.innerText = e.notesMsg;
-  newInput.defaultValue = e.notesMsg;
-  newInput.className = "sticky-input";
-  newInput.style.display = "none";
+  newText.className = "sticky-text";
+  newText.style.maxWidth = "100%";
+  newText.style.textAlign = "left";
+  newText.style.display="flex"
+  newTextArea.defaultValue = e.notesMsg;
+  newTextArea.className = "sticky-input";
+  newTextArea.style.display = "none";
 
-  newDiv.appendChild(newInput);
+  newDiv.appendChild(newTextArea);
   newDiv.appendChild(newText);
 
   newDiv.className = "sticky-notes";
@@ -110,7 +114,7 @@ function updateDefaultNotes(e) {
   console.log(textArea);
 
   newNoteDiv.addEventListener("pointerdown", (e) => {
-    if (e.target === newInput || e.target === deleteButton) return;
+    if (e.target === newTextArea || e.target === deleteButton) return;
     e.preventDefault();
     // Calculate cursor position relative to the element's position from top left
     offsetX = e.clientX - newNoteDiv.offsetLeft;
@@ -147,14 +151,14 @@ function updateDefaultNotes(e) {
     }
   });
 
-  newInput.addEventListener("input", (e) => {
+  newTextArea.addEventListener("input", (e) => {
     let inputValue = e.target.value;
     const changedNote = defaultNotes.find(
       (note) => note.notesID === Number(newDiv.id),
     );
     // alert(changedNote);
     if (changedNote) {
-      changedNote.notesMsg = newInput.value;
+      changedNote.notesMsg = newTextArea.value;
       newText.innerText = changedNote.notesMsg;
       // alert(defaultNotes[newDiv.id].notesMsg);
       // localStorage.setItem("");
@@ -166,7 +170,7 @@ function updateDefaultNotes(e) {
   });
 
   newDiv.addEventListener("pointerdown", (e) => {
-    if (e.target === newInput || e.target === deleteButton) return;
+    if (e.target === newTextArea || e.target === deleteButton) return;
     e.preventDefault();
     // Calculate cursor position relative to the element's position from top left
     offsetX = e.clientX - newDiv.offsetLeft;
@@ -205,23 +209,23 @@ function updateDefaultNotes(e) {
   });
 
   newDiv.addEventListener("mouseenter", (e) => {
-    newInput.style.display = "flex";
+    newTextArea.style.display = "flex";
     newText.style.display = "none";
   });
 
   newDiv.addEventListener("mouseleave", (e) => {
-    newInput.style.display = "none";
+    newTextArea.style.display = "none";
     newText.style.display = "flex";
   });
 
-  newInput.addEventListener("input", (e) => {
+  newTextArea.addEventListener("input", (e) => {
     let inputValue = e.target.value;
     const changedNote = defaultNotes.find(
       (note) => note.notesID === Number(newDiv.id),
     );
     // alert(changedNote);
     if (changedNote) {
-      changedNote.notesMsg = newInput.value;
+      changedNote.notesMsg = newTextArea.value;
       newText.innerText = changedNote.notesMsg;
       // alert(defaultNotes[newDiv.id].notesMsg);
       // localStorage.setItem("");
@@ -237,7 +241,7 @@ function updateDefaultNotes(e) {
   const delButtonInside = newDiv.querySelector(".deleteNote");
 
   newDiv.addEventListener("mouseenter", (e) => {
-    newInput.style.display = "flex";
+    newTextArea.style.display = "flex";
     newText.style.display = "none";
 
     if (delButtonInside) {
@@ -246,7 +250,7 @@ function updateDefaultNotes(e) {
   });
 
   newDiv.addEventListener("mouseleave", (e) => {
-    newInput.style.display = "none";
+    newTextArea.style.display = "none";
     newText.style.display = "flex";
     if (delButtonInside) {
       delButtonInside.style.display = "none";
