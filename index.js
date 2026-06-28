@@ -129,16 +129,6 @@ function updateDefaultNotes(e) {
     }
   });
 
-  newDiv.addEventListener("mouseenter", (e) => {
-    newInput.style.display = "flex";
-    newText.style.display = "none";
-  });
-
-  newDiv.addEventListener("mouseleave", (e) => {
-    newInput.style.display = "none";
-    newText.style.display = "flex";
-  });
-
   newInput.addEventListener("input", (e) => {
     let inputValue = e.target.value;
     const changedNote = defaultNotes.find(
@@ -226,6 +216,25 @@ function updateDefaultNotes(e) {
 
   newDiv.append(deleteButton);
 
+  const delButtonInside = newDiv.querySelector(".deleteNote");
+
+  newDiv.addEventListener("mouseenter", (e) => {
+    newInput.style.display = "flex";
+    newText.style.display = "none";
+
+    if (delButtonInside) {
+      delButtonInside.style.display = "flex";
+    }
+  });
+
+  newDiv.addEventListener("mouseleave", (e) => {
+    newInput.style.display = "none";
+    newText.style.display = "flex";
+    if (delButtonInside) {
+      delButtonInside.style.display = "none";
+    }
+  });
+
   mainBoard.insertBefore(newDiv, newNoteDiv);
 }
 
@@ -254,19 +263,19 @@ postText.addEventListener("keydown", function (e) {
   }
 });
 
-stickyNotes.forEach((note) => {
-  const delButtonInside = note.querySelector(".deleteNote");
+// stickyNotes.forEach((note) => {
+//   const delButtonInside = note.querySelector(".deleteNote");
 
-  if (delButtonInside) {
-    note.addEventListener("mouseenter", (event) => {
-      delButtonInside.style.display = "flex";
-    });
+//   if (delButtonInside) {
+//     note.addEventListener("mouseenter", (event) => {
+//       delButtonInside.style.display = "flex";
+//     });
 
-    note.addEventListener("mouseleave", (event) => {
-      delButtonInside.style.display = "none";
-    });
-  }
-});
+//     note.addEventListener("mouseleave", (event) => {
+//       delButtonInside.style.display = "none";
+//     });
+//   }
+// });
 
 function addNewStickyNote(e) {
   const newNoteDiv = document.getElementById("new-note");
