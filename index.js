@@ -67,19 +67,22 @@ function initApp() {
       : appTitle.innerText;
 
   function defineDownloadData() {
-    const blobData = new Blob([JSON.stringify(defaultNotes)], {
-      type: "application/json",
-    });
-
     const link = document.createElement("a");
 
-    link.href = URL.createObjectURL(blobData);
-    link.download = "note-data.txt";
+    link.download = "note-data.json";
     link.text = "Download JSON";
 
+    link.addEventListener("click", () => {
+      const blobData = new Blob([JSON.stringify(defaultNotes)], {
+        type: "application/json",
+      });
+      link.href = URL.createObjectURL(blobData);
 
+      setTimeout(() => {
+        URL.revokeObjectURL(link.href);
+      }, 200);
+    });
 
-    URL.revokeObjectURL(link.href);
     return link;
   }
 
