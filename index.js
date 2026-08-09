@@ -50,6 +50,7 @@ function initApp() {
   const newNoteDiv = defineInputNote();
   const newSearchInput = defineSearchInput();
   const link = defineDownloadData();
+  const fileInput = defineUploadDataFile();
 
   // Filter Notes for Search Note Feature
   const filterNotes = defaultNotes.filter(
@@ -84,6 +85,36 @@ function initApp() {
     });
 
     return link;
+  }
+
+  function defineUploadDataFile() {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = (e) => {
+        alert(e.target.result);
+
+        defaultNotes = JSON.parse(e.target.result);
+        localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+        sourcenotes = newSearchInput.value == "" ? defaultNotes : filterNotes;
+
+        cleanCurrentNotes();
+        populateNotes();
+      };
+
+      reader.onerror = (e) => {
+        console.log("Error Reading File");
+      };
+    });
+
+    return fileInput;
   }
 
   function defineInputNote() {
@@ -151,9 +182,7 @@ function initApp() {
       console.log(sourcenotes);
       // alert(sourcenotes);
       cleanCurrentNotes();
-      sourcenotes.map((el) => {
-        updateDefaultNotes(el);
-      });
+      populateNotes();
     });
 
     return newSearchInput;
@@ -406,17 +435,21 @@ function initApp() {
     document.querySelectorAll(".sticky-notes").forEach((el) => el.remove());
   }
 
+  function populateNotes() {
+    sourcenotes.forEach((e) => {
+      updateDefaultNotes(e);
+    });
+  }
+
   function startApp() {
     // Appending to the Main Board
     mainBoard.appendChild(newNoteDiv);
     mainBoard.appendChild(newSearchInput);
     mainBoard.appendChild(link);
+    mainBoard.appendChild(fileInput);
 
     defineAddNoteDiv();
-
-    sourcenotes.map((e) => {
-      updateDefaultNotes(e);
-    });
+    populateNotes();
   }
 
   startApp();
