@@ -73,14 +73,11 @@ function initApp() {
     const undoButton = document.createElement("button");
     undoButton.style.display = !lastDeleteStack ? "flex" : "none";
     undoButton.textContent = "Undo";
-    undoButton.addEventListener("click", () => {
-      alert("Undo");
-    });
 
     undoButton.addEventListener("click", () => {
-      defaultNotes.push(lastDeleteStack[lastDeleteStack.lastIndexOf]);
-      lastDeleteStack.pop();
+      defaultNotes.push(lastDeleteStack.pop());
 
+      localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
       checkIfNoteDeleted();
       cleanCurrentNotes();
       populateNotes();
