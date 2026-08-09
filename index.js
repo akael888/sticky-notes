@@ -44,6 +44,7 @@ function initApp() {
         },
       ];
 
+  let lastDeleteStack = [];
   // Get Main Board
   const mainBoard = document.getElementById("main-board");
 
@@ -51,6 +52,7 @@ function initApp() {
   const newSearchInput = defineSearchInput();
   const link = defineDownloadData();
   const fileInput = defineUploadDataFile();
+  const undoButton = defineUndoButton();
 
   // Filter Notes for Search Note Feature
   const filterNotes = defaultNotes.filter(
@@ -66,6 +68,32 @@ function initApp() {
     defaultNotes.length > 0
       ? appTitle.innerText + " " + "with " + defaultNotes.length + " notes.."
       : appTitle.innerText;
+
+  function defineUndoButton() {
+    const undoButton = document.createElement("button");
+    undoButton.style.display = !lastDeleteStack ? "flex" : "none";
+    undoButton.textContent = "Undo";
+    undoButton.addEventListener("click", () => {
+      alert("Undo");
+    });
+
+    undoButton.addEventListener("click", () => {
+      defaultNotes.push(lastDeleteStack[lastDeleteStack.lastIndexOf]);
+      lastDeleteStack.pop();
+
+      checkIfNoteDeleted();
+      cleanCurrentNotes();
+      populateNotes();
+    });
+
+    return undoButton;
+  }
+
+  function checkIfNoteDeleted() {
+    if (lastDeleteStack.length <= 0) {
+      undoButton.style.display = "none";
+    } else undoButton.style.display = "flex";
+  }
 
   function defineDownloadData() {
     const link = document.createElement("a");
@@ -242,6 +270,13 @@ function initApp() {
       const parentDiv = deleteButton.closest("div");
       const parentId = parentDiv.id;
       parentDiv.remove();
+
+      const deletedData = defaultNotes.filter(
+        (data) => data.notesID == parentId,
+      );
+      lastDeleteStack.push(deletedData[0]);
+      checkIfNoteDeleted();
+      alert(lastDeleteStack);
 
       const updatedData = defaultNotes.filter(
         (data) => data.notesID != parentId,
@@ -447,6 +482,7 @@ function initApp() {
     mainBoard.appendChild(newSearchInput);
     mainBoard.appendChild(link);
     mainBoard.appendChild(fileInput);
+    mainBoard.appendChild(undoButton);
 
     defineAddNoteDiv();
     populateNotes();
