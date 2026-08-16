@@ -76,6 +76,7 @@ function initApp() {
 
     undoButton.addEventListener("click", () => {
       defaultNotes.push(lastDeleteStack.pop());
+      sourcenotes = defaultNotes;
 
       localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
       checkIfNoteDeleted();
