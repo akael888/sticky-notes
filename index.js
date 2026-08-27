@@ -16,6 +16,8 @@ function initApp() {
     localStorage.getItem("NEW_NOTES_LOCATION"),
   );
 
+  const DEFAULT_NOTE_COLOR = "#ffe9a7";
+
   // Check if there's local storage Data or not before appending to Default Notes
   let defaultNotes = localStorageNotesData
     ? localStorageNotesData
@@ -26,6 +28,7 @@ function initApp() {
           notesTimeStamp: Date.now(),
           left: 0,
           top: 0,
+          color: DEFAULT_NOTE_COLOR,
         },
         {
           notesID: 1,
@@ -34,6 +37,7 @@ function initApp() {
 
           left: 0,
           top: 0,
+          color: DEFAULT_NOTE_COLOR,
         },
         {
           notesID: 2,
@@ -41,6 +45,7 @@ function initApp() {
           notesTimeStamp: Date.now(),
           left: 0,
           top: 0,
+          color: DEFAULT_NOTE_COLOR,
         },
       ];
 
@@ -234,6 +239,7 @@ function initApp() {
     const newTextArea = document.createElement("textarea");
     const newDateText = document.createElement("span");
     const deleteButton = document.createElement("button");
+    const newColorPicker = document.createElement("input");
 
     newText.innerText = e.notesMsg;
     newText.className = "sticky-text";
@@ -249,6 +255,9 @@ function initApp() {
     deleteButton.textContent = "Delete";
     deleteButton.className = "deleteNote";
     deleteButton.style.display = "none";
+
+    newColorPicker.type = "color";
+    newColorPicker.defaultValue = e.color;
 
     //Time Padding
     const pad = (n) => String(n).padStart(2, 0);
@@ -288,7 +297,8 @@ function initApp() {
           : tempText;
       localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
     });
-    return { newText, newTextArea, deleteButton, newDateText };
+
+    return { newText, newTextArea, deleteButton, newDateText, newColorPicker };
   }
 
   function defineNewDiv(e, elements) {
@@ -300,11 +310,13 @@ function initApp() {
     newDiv.appendChild(elements.newTextArea);
     newDiv.appendChild(elements.newText);
     newDiv.appendChild(elements.deleteButton);
+    newDiv.appendChild(elements.newColorPicker);
 
     newDiv.className = "sticky-notes";
     newDiv.id = `${e.notesID}`;
     newDiv.style.left = `${e.left}px`;
     newDiv.style.top = `${e.top}px`;
+    newDiv.style.background = e.color;
 
     console.log(localStorageNewNoteLocation);
 
@@ -383,6 +395,16 @@ function initApp() {
         localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
       }
     });
+    elements.newColorPicker.addEventListener("input", (e) => {
+      newDiv.style.background = e.target.value;
+      const changedNote = defaultNotes.find(
+        (note) => note.notesID === Number(newDiv.id),
+      );
+      changedNote.color = e.target.value;
+      localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+
+      // const affected defaultNotes.filter((data) => data == Number(newDiv.id));
+    });
 
     return { newDiv };
   }
@@ -454,6 +476,7 @@ function initApp() {
       notesTimeStamp: Date.now(),
       left: newNoteDiv.style.left.split("px")[0],
       top: newNoteDiv.style.top.split("px")[0] - 100,
+      color: DEFAULT_NOTE_COLOR,
     };
     // alert(newStickyNote);
     // alert("masuk");
