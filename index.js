@@ -130,7 +130,7 @@ function initApp() {
       const reader = new FileReader();
       reader.readAsText(file);
       reader.onload = (e) => {
-        alert(e.target.result);
+        // alert(e.target.result);
 
         defaultNotes = JSON.parse(e.target.result);
         localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
@@ -283,7 +283,7 @@ function initApp() {
       );
       lastDeleteStack.push(deletedData[0]);
       checkIfNoteDeleted();
-      alert(lastDeleteStack);
+      // alert(lastDeleteStack);
 
       const updatedData = defaultNotes.filter(
         (data) => data.notesID != parentId,
@@ -331,7 +331,8 @@ function initApp() {
     newDiv.addEventListener("pointerdown", (e) => {
       if (
         e.target === elements.newTextArea ||
-        e.target === elements.deleteButton
+        e.target === elements.deleteButton ||
+        e.target === elements.newColorPicker
       )
         return;
       e.preventDefault();
@@ -402,8 +403,6 @@ function initApp() {
       );
       changedNote.color = e.target.value;
       localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
-
-      // const affected defaultNotes.filter((data) => data == Number(newDiv.id));
     });
 
     return { newDiv };
