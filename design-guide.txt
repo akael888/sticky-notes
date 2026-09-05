@@ -19,6 +19,16 @@ Notes Hierarchy
 - Date and Time Written
 - Delete, Color // Make it into logo
 
+Text Sizes
+12px
+14px
+16px
+18px
+20px
+22px
+24px
+26px
+
 Color System:
 HSL(0,0,95)
 HSL(0,0,75)
