@@ -53,6 +53,11 @@ function initApp() {
   // Get Main Board
   const mainBoard = document.getElementById("main-board");
 
+  //Color Constant
+  const COLOR_CONTRAST_95 = `hsl(0 0% 95%)`;
+  const COLOR_CONTRAST_75 = "hsl(0 0% 75%)";
+  const COLOR_CONTRAST_45 = "hsl(0 0% 45%)";
+
   const newNoteDiv = defineInputNote();
   const newSearchInput = defineSearchInput();
   const link = defineDownloadData();
@@ -192,7 +197,7 @@ function initApp() {
 
     // Defining Search Input Element
     newSearchInput.style.className = "search-bar";
-    newSearchInput.style.backgroundColor = "pink";
+    newSearchInput.style.backgroundColor = COLOR_CONTRAST_95;
     newSearchInput.style.width = "100px";
     newSearchInput.style.height = "100px";
 
@@ -214,6 +219,13 @@ function initApp() {
       // alert(sourcenotes);
       cleanCurrentNotes();
       populateNotes();
+    });
+
+    newSearchInput.addEventListener("mouseenter", (e) => {
+      newSearchInput.style.backgroundColor = COLOR_CONTRAST_45;
+    });
+    newSearchInput.addEventListener("mouseleave", (e) => {
+      newSearchInput.style.backgroundColor = COLOR_CONTRAST_95;
     });
 
     return newSearchInput;
