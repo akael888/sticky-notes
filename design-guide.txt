@@ -1,0 +1,30 @@
+Each Page should have 
+- Primary Information
+- Secondary Information
+- Trietary Information 
+
+Main Page:
+- Primary Information
+>>> Notes Text
+- Secondary Information
+>>> Download JSON Button
+>>> Upload JSON Data
+- Trietary Information
+>>> Notes Count
+>>> App Title
+
+Notes Hierarchy
+- Text
+- How long ago
+- Date and Time Written
+- Delete, Color // Make it into logo
+
+Color System:
+HSL(0,0,95)
+HSL(0,0,75)
+HSL(0,0,55)
+HSL(0,0,35)
+HSL(0,0,15)
+
+
+
