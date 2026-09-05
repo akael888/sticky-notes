@@ -108,6 +108,13 @@ function initApp() {
 
     link.download = "note-data.json";
     link.text = "Download JSON";
+    link.style.border = "2px solid black";
+    link.style.height = "fit-content";
+    link.style.alignContent = "center";
+    link.style.padding = "10px";
+    link.style.backgroundColor = COLOR_CONTRAST_45;
+    link.style.color = COLOR_CONTRAST_95;
+    link.style.borderRadius = "12px";
 
     link.addEventListener("click", () => {
       const blobData = new Blob([JSON.stringify(defaultNotes)], {
@@ -126,6 +133,11 @@ function initApp() {
   function defineUploadDataFile() {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
+    fileInput.style.border = "2px solid black";
+    fileInput.style.height = "fit-content";
+    fileInput.style.alignContent = "center";
+    fileInput.style.padding = "10px";
+    fileInput.style.borderRadius = "12px";
 
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -198,8 +210,11 @@ function initApp() {
     // Defining Search Input Element
     newSearchInput.style.className = "search-bar";
     newSearchInput.style.backgroundColor = COLOR_CONTRAST_95;
-    newSearchInput.style.width = "100px";
-    newSearchInput.style.height = "100px";
+    newSearchInput.style.width = "100%";
+    newSearchInput.style.height = "15px";
+    newSearchInput.style.borderRadius = "10px";
+    newSearchInput.style.padding = "12px";
+    newSearchInput.placeholder = "Search note description text here.."
 
     // New Search Input Events
     newSearchInput.addEventListener("input", (e) => {
@@ -221,12 +236,12 @@ function initApp() {
       populateNotes();
     });
 
-    newSearchInput.addEventListener("mouseenter", (e) => {
-      newSearchInput.style.backgroundColor = COLOR_CONTRAST_45;
-    });
-    newSearchInput.addEventListener("mouseleave", (e) => {
-      newSearchInput.style.backgroundColor = COLOR_CONTRAST_95;
-    });
+    // newSearchInput.addEventListener("mouseenter", (e) => {
+    //   newSearchInput.style.backgroundColor = COLOR_CONTRAST_45;
+    // });
+    // newSearchInput.addEventListener("mouseleave", (e) => {
+    //   newSearchInput.style.backgroundColor = COLOR_CONTRAST_95;
+    // });
 
     return newSearchInput;
   }
@@ -511,10 +526,17 @@ function initApp() {
   function startApp() {
     // Appending to the Main Board
     mainBoard.appendChild(newNoteDiv);
-    mainBoard.appendChild(newSearchInput);
-    mainBoard.appendChild(link);
-    mainBoard.appendChild(fileInput);
+
+    const optionDiv = document.createElement("div");
+    optionDiv.style.display = "flex";
+    optionDiv.style.gap = "12px";
+    optionDiv.style.width = "100%"
+    optionDiv.appendChild(fileInput);
+    optionDiv.appendChild(link); //downloadJSON
+    optionDiv.appendChild(newSearchInput);
+
     mainBoard.appendChild(undoButton);
+    mainBoard.appendChild(optionDiv);
 
     defineAddNoteDiv();
     populateNotes();
