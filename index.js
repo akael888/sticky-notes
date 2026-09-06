@@ -74,10 +74,10 @@ function initApp() {
 
   // Defining App Title to Change App Title Based on Notes Count
   const appTitle = document.getElementById("app-title");
-  appTitle.innerText =
-    defaultNotes.length > 0
-      ? appTitle.innerText + " " + "with " + defaultNotes.length + " notes.."
-      : appTitle.innerText;
+  // appTitle.innerText =
+  //   defaultNotes.length > 0
+  //     ? appTitle.innerText + " " + "with " + defaultNotes.length + " notes.."
+  //     : appTitle.innerText;
 
   function defineUndoButton() {
     const undoButton = document.createElement("button");
@@ -214,7 +214,7 @@ function initApp() {
     newSearchInput.style.height = "15px";
     newSearchInput.style.borderRadius = "10px";
     newSearchInput.style.padding = "12px";
-    newSearchInput.placeholder = "Search note description text here.."
+    newSearchInput.placeholder = "Search note description text here..";
 
     // New Search Input Events
     newSearchInput.addEventListener("input", (e) => {
@@ -316,12 +316,12 @@ function initApp() {
         (data) => data.notesID != parentId,
       );
       defaultNotes = updatedData;
-      let tempText = "Sticky Dump";
-      appTitle.innerText = null;
-      appTitle.innerText =
-        defaultNotes.length > 0
-          ? tempText + " " + "with " + defaultNotes.length + " notes.."
-          : tempText;
+      // let tempText = "Sticky Dump";
+      // appTitle.innerText = null;
+      // appTitle.innerText =
+      //   defaultNotes.length > 0
+      //     ? tempText + " " + "with " + defaultNotes.length + " notes.."
+      //     : tempText;
       localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
     });
 
@@ -530,7 +530,7 @@ function initApp() {
     const optionDiv = document.createElement("div");
     optionDiv.style.display = "flex";
     optionDiv.style.gap = "12px";
-    optionDiv.style.width = "100%"
+    optionDiv.style.width = "100%";
     optionDiv.appendChild(fileInput);
     optionDiv.appendChild(link); //downloadJSON
     optionDiv.appendChild(newSearchInput);
