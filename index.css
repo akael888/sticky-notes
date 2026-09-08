@@ -40,7 +40,7 @@
     cursor: move;
     user-select: none;
     touch-action: none;
-    box-shadow: 5px 5px 1px 1px rgb(80, 67, 27);
+    box-shadow: 10px 10px 20px 0px hsl(0, 0%, 45%);
     z-index: 100;
 }
 
