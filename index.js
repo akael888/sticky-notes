@@ -281,10 +281,18 @@ function initApp() {
 
     deleteButton.textContent = "Delete";
     deleteButton.className = "deleteNote";
-    deleteButton.style.display = "none";
+    deleteButton.style.display = "block";
+    deleteButton.style.width = "70px";
+    deleteButton.style.position = "absolute";
+    deleteButton.style.top = "1px";
+    deleteButton.style.left = "130px";
 
     newColorPicker.type = "color";
     newColorPicker.defaultValue = e.color;
+    newColorPicker.style.width = "70px";
+    newColorPicker.style.position = "absolute";
+    newColorPicker.style.top = "25px";
+    newColorPicker.style.left = "130px";
 
     //Time Padding
     const pad = (n) => String(n).padStart(2, 0);
@@ -292,12 +300,15 @@ function initApp() {
     const convertedTimeStamp = new Date(e.notesTimeStamp);
     const durationToNow = getDuration(e.notesTimeStamp);
 
-    const fullDateConverted = `${convertedTimeStamp.getDate()}-${convertedTimeStamp.getMonth() + 1}-${convertedTimeStamp.getFullYear()} | ${pad(convertedTimeStamp.getHours())}:${pad(convertedTimeStamp.getMinutes())}:${pad(convertedTimeStamp.getSeconds())} | ${durationToNow.days} days ${durationToNow.hours} hours ${durationToNow.minutes} minutes ${durationToNow.seconds} seconds ago`;
+    // const fullDateConverted = `${convertedTimeStamp.getDate()}-${convertedTimeStamp.getMonth() + 1}-${convertedTimeStamp.getFullYear()} | ${pad(convertedTimeStamp.getHours())}:${pad(convertedTimeStamp.getMinutes())}:${pad(convertedTimeStamp.getSeconds())} | ${durationToNow.days} days ${durationToNow.hours} hours ${durationToNow.minutes} minutes ${durationToNow.seconds} seconds ago`;
 
+    const fullDateConverted = `${durationToNow.days ? `${durationToNow.days} days` : ""} ${durationToNow.hours ? `${durationToNow.hours} hours` : ""}  ${durationToNow.minutes ? `${durationToNow.minutes} minutes` : ""} ${durationToNow.seconds ? `${durationToNow.seconds} seconds ago` : ""} `;
     newDateText.innerText = fullDateConverted;
-    newDateText.style.width = "100%";
+    newDateText.style.width = "130%";
     newDateText.style.position = "absolute";
-    newDateText.style.top = "130px";
+    newDateText.style.left = "130px";
+    newDateText.style.top = "80px";
+    newDateText.style.textAlign = "left";
 
     //Events
     deleteButton.addEventListener("click", (e) => {
@@ -400,17 +411,17 @@ function initApp() {
       elements.newTextArea.style.display = "flex";
       elements.newText.style.display = "none";
 
-      if (delButtonInside) {
-        delButtonInside.style.display = "flex";
-      }
+      // if (delButtonInside) {
+      //   delButtonInside.style.display = "block";
+      // }
     });
 
     newDiv.addEventListener("mouseleave", (e) => {
       elements.newTextArea.style.display = "none";
       elements.newText.style.display = "flex";
-      if (delButtonInside) {
-        delButtonInside.style.display = "none";
-      }
+      // if (delButtonInside) {
+      //   delButtonInside.style.display = "block";
+      // }
     });
 
     elements.newTextArea.addEventListener("input", (e) => {
