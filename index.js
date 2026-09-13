@@ -550,12 +550,20 @@ function initApp() {
     mainBoard.appendChild(newNoteDiv);
 
     const optionDiv = document.createElement("div");
+    const appTitle = document.createElement("h1");
     optionDiv.style.display = "flex";
+    optionDiv.style.position = "fixed";
     optionDiv.style.gap = "12px";
     optionDiv.style.width = "100%";
+    optionDiv.style.zIndex = "10000";
+
+    appTitle.textContent = "Sticky Notes";
+    appTitle.id = "app-title";
+
+    optionDiv.appendChild(appTitle);
+    optionDiv.appendChild(newSearchInput);
     optionDiv.appendChild(fileInput);
     optionDiv.appendChild(link); //downloadJSON
-    optionDiv.appendChild(newSearchInput);
 
     mainBoard.appendChild(undoButton);
     mainBoard.appendChild(optionDiv);
