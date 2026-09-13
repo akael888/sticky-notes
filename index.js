@@ -83,6 +83,14 @@ function initApp() {
     const undoButton = document.createElement("button");
     undoButton.style.display = !lastDeleteStack ? "flex" : "none";
     undoButton.textContent = "Undo";
+    undoButton.style.display = "inline-flex";
+    undoButton.style.justifyContent = "center";
+    undoButton.style.alignContent = "center";
+    undoButton.style.width = "100px";
+    undoButton.style.height = "fit-content";
+    undoButton.style.position = "fixed";
+    undoButton.style.bottom = "10px";
+    undoButton.style.right = "100px";
 
     undoButton.addEventListener("click", () => {
       defaultNotes.push(lastDeleteStack.pop());
@@ -279,20 +287,23 @@ function initApp() {
     newTextArea.style.display = "none";
     newTextArea.style.height = "100px";
 
-    deleteButton.textContent = "Delete";
+    deleteButton.textContent = "D";
     deleteButton.className = "deleteNote";
     deleteButton.style.display = "block";
-    deleteButton.style.width = "70px";
+    deleteButton.style.width = "25px";
     deleteButton.style.position = "absolute";
     deleteButton.style.top = "1px";
     deleteButton.style.left = "130px";
+    deleteButton.style.borderRadius = "10px";
 
     newColorPicker.type = "color";
     newColorPicker.defaultValue = e.color;
-    newColorPicker.style.width = "70px";
+    newColorPicker.style.width = "25px";
     newColorPicker.style.position = "absolute";
     newColorPicker.style.top = "25px";
     newColorPicker.style.left = "130px";
+    newColorPicker.style.borderRadius = "10px";
+    newColorPicker.style.overflow = "hidden";
 
     //Time Padding
     const pad = (n) => String(n).padStart(2, 0);
