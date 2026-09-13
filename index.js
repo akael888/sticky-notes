@@ -115,8 +115,10 @@ function initApp() {
     const link = document.createElement("a");
 
     link.download = "note-data.json";
-    link.text = "Download JSON";
+    link.text = "Download";
     link.style.border = "2px solid black";
+    link.style.flexGrow = "1";
+    link.style.maxWidth = "10vw";
     link.style.height = "fit-content";
     link.style.alignContent = "center";
     link.style.padding = "10px";
@@ -142,6 +144,8 @@ function initApp() {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.style.border = "2px solid black";
+    fileInput.style.flexGrow = "1";
+    fileInput.style.maxWidth = "10vw";
     fileInput.style.height = "fit-content";
     fileInput.style.alignContent = "center";
     fileInput.style.padding = "10px";
@@ -218,7 +222,8 @@ function initApp() {
     // Defining Search Input Element
     newSearchInput.style.className = "search-bar";
     newSearchInput.style.backgroundColor = COLOR_CONTRAST_95;
-    newSearchInput.style.width = "100%";
+    newSearchInput.style.maxWidth = "60vw";
+    newSearchInput.style.flexGrow = "1";
     newSearchInput.style.height = "15px";
     newSearchInput.style.borderRadius = "10px";
     newSearchInput.style.padding = "12px";
@@ -551,16 +556,29 @@ function initApp() {
 
     const optionDiv = document.createElement("div");
     const appTitle = document.createElement("h1");
+    const appTitleContainer = document.createElement("div");
     optionDiv.style.display = "flex";
     optionDiv.style.position = "fixed";
     optionDiv.style.gap = "12px";
-    optionDiv.style.width = "100%";
+    optionDiv.style.width = "100dvw";
     optionDiv.style.zIndex = "10000";
 
     appTitle.textContent = "Sticky Notes";
+    appTitle.style.width = "fit-content";
+    appTitle.style.height = "100%";
+
+    appTitleContainer.style.display = "flex";
+    appTitleContainer.style.justifyContent = "center";
+    appTitleContainer.style.alignSelf = "center";
+
+    appTitleContainer.style.flexGrow = "1";
+    appTitleContainer.style.maxWidth = "10vw";
+
     appTitle.id = "app-title";
 
-    optionDiv.appendChild(appTitle);
+    appTitleContainer.appendChild(appTitle);
+
+    optionDiv.appendChild(appTitleContainer);
     optionDiv.appendChild(newSearchInput);
     optionDiv.appendChild(fileInput);
     optionDiv.appendChild(link); //downloadJSON
