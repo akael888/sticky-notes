@@ -283,13 +283,17 @@ function initApp() {
 
     newText.innerText = e.notesMsg;
     newText.className = "sticky-text";
-    newText.style.maxWidth = "100%";
+    // newText.style.maxWidth = "100%";
     newText.style.textAlign = "left";
     newText.style.display = "flex";
+    newText.style.width = "100px";
+    newText.style.height = "100px";
+    newText.style.position = "absolute";
 
     newTextArea.defaultValue = e.notesMsg;
     newTextArea.className = "sticky-input";
-    newTextArea.style.display = "none";
+    newTextArea.style.display = "hidden";
+    newTextArea.style.width = "100px";
     newTextArea.style.height = "100px";
 
     deleteButton.textContent = "D";
@@ -352,6 +356,44 @@ function initApp() {
       localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
     });
 
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        //get the width of height of the entry resize observer
+        const { width, height } = entry.contentRect;
+        // const stickyTextElement = newTextArea.closest(".sticky-notes");
+        // const stickyTextWidth = parseInt(stickyTextElement.style.width);
+        // const stickyTextHeight = parseInt(stickyTextElement.style.height);
+
+        console.log(width);
+        console.log(height);
+        console.log(deleteButton.style.top);
+        console.log(deleteButton.style.left);
+        console.log(newColorPicker.style.top);
+        console.log(newColorPicker.style.left);
+        console.log(newDateText.style.left);
+        console.log(newDateText.style.top);
+        console.log("====");
+
+        if (width != 100 || height != 100) {
+          newText.style.width = `${width}px`;
+          newText.style.height = `${height}px`;
+
+          const scaledWidth = width - 100;
+          const scaledHeight = height - 100;
+
+
+          deleteButton.style.top = `${scaledHeight + 1}px`;
+          deleteButton.style.left = `${scaledWidth + 130}px`;
+          newColorPicker.style.top = `${scaledHeight + 25}px`;
+          newColorPicker.style.left = `${scaledWidth + 130}px`;
+          newDateText.style.left = `${scaledWidth + 130}px`;
+          newDateText.style.top = `${scaledHeight + 80}px`;
+        }
+      }
+    });
+
+    resizeObserver.observe(newTextArea);
+
     return { newText, newTextArea, deleteButton, newDateText, newColorPicker };
   }
 
@@ -359,18 +401,17 @@ function initApp() {
     // a Div to Contain All Sticky Notes Element
 
     const newDiv = document.createElement("div");
+    newDiv.className = "sticky-notes";
+    newDiv.id = `${e.notesID}`;
+    newDiv.style.left = `${e.left}px`;
+    newDiv.style.top = `${e.top}px`;
+    newDiv.style.background = e.color;
 
     newDiv.appendChild(elements.newDateText);
     newDiv.appendChild(elements.newTextArea);
     newDiv.appendChild(elements.newText);
     newDiv.appendChild(elements.deleteButton);
     newDiv.appendChild(elements.newColorPicker);
-
-    newDiv.className = "sticky-notes";
-    newDiv.id = `${e.notesID}`;
-    newDiv.style.left = `${e.left}px`;
-    newDiv.style.top = `${e.top}px`;
-    newDiv.style.background = e.color;
 
     console.log(localStorageNewNoteLocation);
 
@@ -424,8 +465,8 @@ function initApp() {
     const delButtonInside = newDiv.querySelector(".deleteNote");
 
     newDiv.addEventListener("mouseenter", (e) => {
-      elements.newTextArea.style.display = "flex";
-      elements.newText.style.display = "none";
+      elements.newTextArea.style.visibility = "visible";
+      elements.newText.style.visibility = "hidden";
 
       // if (delButtonInside) {
       //   delButtonInside.style.display = "block";
@@ -433,8 +474,8 @@ function initApp() {
     });
 
     newDiv.addEventListener("mouseleave", (e) => {
-      elements.newTextArea.style.display = "none";
-      elements.newText.style.display = "flex";
+      elements.newTextArea.style.visibility = "hidden";
+      elements.newText.style.visibility = "visible";
       // if (delButtonInside) {
       //   delButtonInside.style.display = "block";
       // }
@@ -522,6 +563,8 @@ function initApp() {
     // e.preventDefault();
     const newNoteDiv = document.getElementById("new-note");
     const postText = document.getElementById("post-text");
+    postText.style.width = "100px";
+    postText.style.height = "100px";
 
     const newStickyNote = {
       notesID: Date.now(),
