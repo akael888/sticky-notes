@@ -29,6 +29,8 @@ function initApp() {
           left: 0,
           top: 0,
           color: DEFAULT_NOTE_COLOR,
+          areaWidth: 100,
+          areaHeight: 100,
         },
         {
           notesID: 1,
@@ -38,6 +40,8 @@ function initApp() {
           left: 0,
           top: 0,
           color: DEFAULT_NOTE_COLOR,
+          areaWidth: 100,
+          areaHeight: 100,
         },
         {
           notesID: 2,
@@ -46,6 +50,8 @@ function initApp() {
           left: 0,
           top: 0,
           color: DEFAULT_NOTE_COLOR,
+          areaWidth: 100,
+          areaHeight: 100,
         },
       ];
 
@@ -288,13 +294,17 @@ function initApp() {
     newText.style.display = "flex";
     newText.style.width = "100px";
     newText.style.height = "100px";
+    newText.style.overflow = "hidden";
     newText.style.position = "absolute";
 
     newTextArea.defaultValue = e.notesMsg;
     newTextArea.className = "sticky-input";
-    newTextArea.style.display = "hidden";
-    newTextArea.style.width = "100px";
-    newTextArea.style.height = "100px";
+    newTextArea.style.visibility = "hidden";
+    newTextArea.style.width = `${e.areaWidth ? e.areaWidth : 100}px`;
+    newTextArea.style.height = `${e.areaHeight ? e.areaHeight : 100}px`;
+    newTextArea.style.minWidth = "100px";
+    newTextArea.style.minHeight = "100px";
+
 
     deleteButton.textContent = "D";
     deleteButton.className = "deleteNote";
@@ -381,13 +391,16 @@ function initApp() {
           const scaledWidth = width - 100;
           const scaledHeight = height - 100;
 
-
           deleteButton.style.top = `${scaledHeight + 1}px`;
           deleteButton.style.left = `${scaledWidth + 130}px`;
           newColorPicker.style.top = `${scaledHeight + 25}px`;
           newColorPicker.style.left = `${scaledWidth + 130}px`;
           newDateText.style.left = `${scaledWidth + 130}px`;
           newDateText.style.top = `${scaledHeight + 80}px`;
+
+          e.areaWidth = width;
+          e.areaHeight = height;
+          localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
         }
       }
     });
