@@ -281,6 +281,9 @@ function initApp() {
   function defineStarterElements(e) {
     // Starter Elements in a Sticky Notes
 
+    console.log("===============DEFINE STARTER ELEMNTY");
+    console.log(e);
+
     const newText = document.createElement("text");
     const newTextArea = document.createElement("textarea");
     const newDateText = document.createElement("span");
@@ -304,7 +307,6 @@ function initApp() {
     newTextArea.style.height = `${e.areaHeight ? e.areaHeight : 100}px`;
     newTextArea.style.minWidth = "100px";
     newTextArea.style.minHeight = "100px";
-
 
     deleteButton.textContent = "D";
     deleteButton.className = "deleteNote";
@@ -374,17 +376,18 @@ function initApp() {
         // const stickyTextWidth = parseInt(stickyTextElement.style.width);
         // const stickyTextHeight = parseInt(stickyTextElement.style.height);
 
-        console.log(width);
-        console.log(height);
-        console.log(deleteButton.style.top);
-        console.log(deleteButton.style.left);
-        console.log(newColorPicker.style.top);
-        console.log(newColorPicker.style.left);
-        console.log(newDateText.style.left);
-        console.log(newDateText.style.top);
-        console.log("====");
+        // console.log(width);
+        // console.log(height);
+        // console.log(deleteButton.style.top);
+        // console.log(deleteButton.style.left);
+        // console.log(newColorPicker.style.top);
+        // console.log(newColorPicker.style.left);
+        // console.log(newDateText.style.left);
+        // console.log(newDateText.style.top);
+        // console.log("====");
+        console.log("observer fired", entry.target.isConnected, width, height);
 
-        if (width != 100 || height != 100) {
+        if ((width != 100 || height != 100) && entry.target.isConnected) {
           newText.style.width = `${width}px`;
           newText.style.height = `${height}px`;
 
@@ -400,6 +403,18 @@ function initApp() {
 
           e.areaWidth = width;
           e.areaHeight = height;
+          // alert(e.notesID);
+          const changedObject = defaultNotes.find(
+            (note) => note.notesID == e.notesID,
+          );
+
+          if (changedObject) {
+            // alert("changing Object");
+            changedObject.areaWidth = width;
+            changedObject.areaHeight = height;
+          }
+
+          sourcenotes = defaultNotes;
           localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
         }
       }
@@ -601,6 +616,14 @@ function initApp() {
   }
 
   function populateNotes() {
+    // alert("t");
+    // console.log("sourcenotes");
+
+    // console.log(sourcenotes);
+    // console.log(defaultNotes);
+
+    // console.log("sourcenotes");
+    // alert("x");
     sourcenotes.forEach((e) => {
       updateDefaultNotes(e);
     });
