@@ -119,10 +119,14 @@ function initApp() {
 
   function defineDownloadData() {
     const link = document.createElement("a");
+    const blobData = new Blob([JSON.stringify(defaultNotes)], {
+      type: "application/json",
+    });
+    link.href = URL.createObjectURL(blobData);
 
     link.download = "note-data.json";
-    link.text = "Download";
-    link.style.border = "2px solid black";
+    link.text = "Download JSON";
+    link.style.border = "2px solid transparent";
     link.style.flexGrow = "1";
     link.style.maxWidth = "10vw";
     link.style.height = "fit-content";
@@ -131,16 +135,22 @@ function initApp() {
     link.style.backgroundColor = COLOR_CONTRAST_45;
     link.style.color = COLOR_CONTRAST_95;
     link.style.borderRadius = "12px";
+    link.style.textAlign = "center";
+    link.style.textDecoration = "none";
 
     link.addEventListener("click", () => {
-      const blobData = new Blob([JSON.stringify(defaultNotes)], {
-        type: "application/json",
-      });
-      link.href = URL.createObjectURL(blobData);
-
       setTimeout(() => {
         URL.revokeObjectURL(link.href);
       }, 200);
+    });
+
+    link.addEventListener("mouseenter", () => {
+      link.style.backgroundColor = COLOR_CONTRAST_75;
+      link.style.border = "2px solid black";
+    });
+    link.addEventListener("mouseleave", () => {
+      link.style.backgroundColor = COLOR_CONTRAST_45;
+      link.style.border = "2px solid transparent";
     });
 
     return link;
@@ -149,7 +159,7 @@ function initApp() {
   function defineUploadDataFile() {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
-    fileInput.style.border = "2px solid black";
+    fileInput.style.border = "2px solid transparent";
     fileInput.style.flexGrow = "1";
     fileInput.style.maxWidth = "10vw";
     fileInput.style.height = "fit-content";
@@ -178,6 +188,13 @@ function initApp() {
       reader.onerror = (e) => {
         console.log("Error Reading File");
       };
+    });
+
+    fileInput.addEventListener("mouseenter", () => {
+      fileInput.style.border = "2px solid black";
+    });
+    fileInput.addEventListener("mouseleave", () => {
+      fileInput.style.border = "2px solid transparent";
     });
 
     return fileInput;
@@ -336,6 +353,8 @@ function initApp() {
 
     const fullDateConverted = `${durationToNow.days ? `${durationToNow.days} days` : ""} ${durationToNow.hours ? `${durationToNow.hours} hours` : ""}  ${durationToNow.minutes ? `${durationToNow.minutes} minutes` : ""} ${durationToNow.seconds ? `${durationToNow.seconds} seconds ago` : ""} `;
     newDateText.innerText = fullDateConverted;
+    newDateText.dataset.created = e.notesTimeStamp;
+    newDateText.className = "noteTimestamp";
     newDateText.style.width = "130%";
     newDateText.style.position = "absolute";
     newDateText.style.left = "130px";
@@ -629,6 +648,29 @@ function initApp() {
     });
   }
 
+  function updateNoteDuration() {
+    const liveTimes = document.querySelectorAll(".noteTimestamp");
+
+    liveTimes.forEach((span) => {
+      const createdTime = parseInt(span.dataset.created);
+      const diffInSeconds = Math.floor((Date.now() - createdTime) / 1000);
+
+      // Calculate days, hours, minutes, and seconds
+      const days = Math.floor(diffInSeconds / (3600 * 24));
+      const hours = Math.floor((diffInSeconds % (3600 * 24)) / 3600);
+      const minutes = Math.floor((diffInSeconds % 3600) / 60);
+      const seconds = diffInSeconds % 60;
+
+      const durationToNow = { days, hours, minutes, seconds };
+
+      // Your exact requested string formatting rule
+      const fullDateConverted = `${durationToNow.days ? `${durationToNow.days} days` : ""} ${durationToNow.hours ? `${durationToNow.hours} hours` : ""}  ${durationToNow.minutes ? `${durationToNow.minutes} minutes` : ""} ${durationToNow.seconds ? `${durationToNow.seconds} seconds ago` : "just now"} `;
+
+      // Cleanly update only this specific text fragment without forcing a layout shift
+      span.textContent = fullDateConverted;
+    });
+  }
+
   function startApp() {
     // Appending to the Main Board
     mainBoard.appendChild(newNoteDiv);
@@ -670,4 +712,6 @@ function initApp() {
   }
 
   startApp();
+
+  setInterval(updateNoteDuration, 1000);
 }
