@@ -87,9 +87,9 @@ function initApp() {
 
   function defineUndoButton() {
     const undoButton = document.createElement("button");
-    undoButton.style.display = !lastDeleteStack ? "flex" : "none";
+    undoButton.style.display =
+      lastDeleteStack.length > 0 ? "inline-flex" : "none";
     undoButton.textContent = "Undo";
-    undoButton.style.display = "inline-flex";
     undoButton.style.justifyContent = "center";
     undoButton.style.alignContent = "center";
     undoButton.style.width = "100px";
@@ -99,10 +99,12 @@ function initApp() {
     undoButton.style.right = "100px";
 
     undoButton.addEventListener("click", () => {
+      if (lastDeleteStack.length === 0) {
+        return;
+      }
       defaultNotes.push(lastDeleteStack.pop());
       sourcenotes = defaultNotes;
-
-      localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+      updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
       checkIfNoteDeleted();
       cleanCurrentNotes();
       populateNotes();
@@ -166,6 +168,7 @@ function initApp() {
     fileInput.style.alignContent = "center";
     fileInput.style.padding = "10px";
     fileInput.style.borderRadius = "12px";
+    fileInput.accept = ".json";
 
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -177,12 +180,22 @@ function initApp() {
       reader.onload = (e) => {
         // alert(e.target.result);
 
-        defaultNotes = JSON.parse(e.target.result);
-        localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
-        sourcenotes = newSearchInput.value == "" ? defaultNotes : filterNotes;
+        parsedData = JSON.parse(e.target.result);
 
-        cleanCurrentNotes();
-        populateNotes();
+        if (!parsedData) {
+          alert("Empty JSON");
+          return;
+        }
+
+        if (checkFileInput(parsedData) === true) {
+          defaultNotes = parsedData;
+          updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+          sourcenotes = newSearchInput.value == "" ? defaultNotes : filterNotes;
+
+          cleanCurrentNotes();
+          populateNotes();
+          return;
+        }
       };
 
       reader.onerror = (e) => {
@@ -198,6 +211,31 @@ function initApp() {
     });
 
     return fileInput;
+  }
+
+  function checkFileInput(parsedData) {
+    if (parsedData.length > 0) {
+      parsedData.forEach((data, index) => {
+        const { notesID, notesMsg, notesTimeStamp, left, top, color } = data;
+        console.log("checkFileInput");
+        console.log(data);
+        if (
+          !notesID ||
+          !notesMsg ||
+          !notesTimeStamp ||
+          !left ||
+          !top ||
+          !color
+        ) {
+          alert("Empty Data Field");
+          return false;
+        }
+      });
+      return true;
+    } else {
+      alert("Empty Data");
+      return false;
+    }
   }
 
   function defineInputNote() {
@@ -384,7 +422,7 @@ function initApp() {
       //   defaultNotes.length > 0
       //     ? tempText + " " + "with " + defaultNotes.length + " notes.."
       //     : tempText;
-      localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(updatedData));
+      updateNotesLocalStorage("WEB_DIARY_NOTES", updatedData);
     });
 
     const resizeObserver = new ResizeObserver((entries) => {
@@ -434,7 +472,8 @@ function initApp() {
           }
 
           sourcenotes = defaultNotes;
-          localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+
+          updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
         }
       }
     });
@@ -499,7 +538,7 @@ function initApp() {
           changedNote.left = newX;
           changedNote.top = newY;
 
-          localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+          updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
         }
       }
 
@@ -535,7 +574,7 @@ function initApp() {
       if (changedNote) {
         changedNote.notesMsg = elements.newTextArea.value;
         elements.newText.innerText = changedNote.notesMsg;
-        localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+        updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
       }
     });
     elements.newColorPicker.addEventListener("input", (e) => {
@@ -544,7 +583,7 @@ function initApp() {
         (note) => note.notesID === Number(newDiv.id),
       );
       changedNote.color = e.target.value;
-      localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+      updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
     });
 
     return { newDiv };
@@ -587,10 +626,7 @@ function initApp() {
           top: newY,
         };
 
-        localStorage.setItem(
-          "NEW_NOTES_LOCATION",
-          JSON.stringify(newNoteLocation),
-        );
+        updateNotesLocalStorage("NEW_NOTES_LOCATION", newNoteLocation);
       }
 
       function pointerUp() {
@@ -625,7 +661,7 @@ function initApp() {
     // alert("masuk");
     defaultNotes.push(newStickyNote);
     updateDefaultNotes(newStickyNote);
-    localStorage.setItem("WEB_DIARY_NOTES", JSON.stringify(defaultNotes));
+    updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
     newNoteDiv.style.left = `${localStorageNewNoteLocation.left}px`;
     newNoteDiv.style.top = `${localStorageNewNoteLocation.top}px`;
   }
@@ -669,6 +705,14 @@ function initApp() {
       // Cleanly update only this specific text fragment without forcing a layout shift
       span.textContent = fullDateConverted;
     });
+  }
+
+  function updateNotesLocalStorage(storageID, input) {
+    if (!input) {
+      console.log("No Data Passed");
+      return;
+    }
+    localStorage.setItem(storageID, JSON.stringify(input));
   }
 
   function startApp() {
