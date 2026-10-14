@@ -218,9 +218,10 @@ function initApp() {
   function checkFileInput(parsedData) {
     if (parsedData.length > 0) {
       for (const data of parsedData) {
+        // Define all fields for validation
         const { notesID, notesMsg, notesTimeStamp, left, top, color } = data;
-        console.log("checkFileInput");
-        console.log(data);
+
+        // Check if all fields exist or not
         if (
           !notesID ||
           !notesMsg ||
@@ -376,12 +377,16 @@ function initApp() {
 
     newColorPicker.type = "color";
     newColorPicker.defaultValue = e.color;
+    newColorPicker.style.backgroundColor = e.color;
     newColorPicker.style.width = "25px";
     newColorPicker.style.position = "absolute";
     newColorPicker.style.top = "25px";
     newColorPicker.style.left = "130px";
     newColorPicker.style.borderRadius = "10px";
     newColorPicker.style.overflow = "hidden";
+
+
+    // newColorPicker.style.display = "none";
 
     //Time Padding
     const pad = (n) => String(n).padStart(2, 0);
@@ -585,6 +590,7 @@ function initApp() {
         (note) => note.notesID === Number(newDiv.id),
       );
       changedNote.color = e.target.value;
+      elements.newColorPicker.style.backgroundColor = e.target.value;
       updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
     });
 
