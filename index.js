@@ -187,13 +187,15 @@ function initApp() {
           return;
         }
 
-        if (checkFileInput(parsedData) === true) {
+        if (checkFileInput(parsedData)) {
           defaultNotes = parsedData;
           updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
           sourcenotes = newSearchInput.value == "" ? defaultNotes : filterNotes;
 
           cleanCurrentNotes();
           populateNotes();
+          return;
+        } else {
           return;
         }
       };
@@ -215,7 +217,7 @@ function initApp() {
 
   function checkFileInput(parsedData) {
     if (parsedData.length > 0) {
-      parsedData.forEach((data, index) => {
+      for (const data of parsedData) {
         const { notesID, notesMsg, notesTimeStamp, left, top, color } = data;
         console.log("checkFileInput");
         console.log(data);
@@ -227,10 +229,10 @@ function initApp() {
           !top ||
           !color
         ) {
-          alert("Empty Data Field");
+          alert("Incorrect Data Field");
           return false;
         }
-      });
+      }
       return true;
     } else {
       alert("Empty Data");
