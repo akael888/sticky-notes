@@ -1,6 +1,11 @@
+:root {
+    --color-contrast-95: hsl(0, 0%, 95%);
+    --color-contrast-45: hsl(0, 0%, 45);
+}
+
 .main-div {
     display: grid;
-    background-color: hsl(0, 0%, 95%);
+    background-color: var(--color-contrast-95);
 }
 
 .main-text-area-container {
@@ -102,7 +107,7 @@
     z-index: 1;
     /* position: absolute; */
     color: hsl(0, 0%, 35%);
-    border: 10px hsl(0, 0%, 45);
+    border: 10px var(--color-contrast-45);
     opacity: 90%;
 }
 
@@ -117,8 +122,12 @@ footer {
     position: fixed;
     bottom: 0px;
     background-color: hsl(0, 0%, 75%);
-    width: 100%;
     padding: 4px;
+    width: 100%;
+}
+
+body {
+    background-color: var(--color-contrast-95);
 }
 
 /* #new-note {left: 200px;} */
