@@ -16,6 +16,9 @@ function initApp() {
     localStorage.getItem("NEW_NOTES_LOCATION"),
   );
 
+  // Track Highest Index to Put which notes to the front
+  let highestZIndex = 100;
+
   const DEFAULT_NOTE_COLOR = "#ffe9a7";
 
   // Check if there's local storage Data or not before appending to Default Notes
@@ -385,7 +388,6 @@ function initApp() {
     newColorPicker.style.borderRadius = "10px";
     newColorPicker.style.overflow = "hidden";
 
-
     // newColorPicker.style.display = "none";
 
     //Time Padding
@@ -517,6 +519,9 @@ function initApp() {
       : 0;
 
     newDiv.addEventListener("pointerdown", (e) => {
+      newDiv.style.zIndex = `${highestZIndex + 1}`;
+      highestZIndex = highestZIndex + 1;
+
       if (
         e.target === elements.newTextArea ||
         e.target === elements.deleteButton ||
@@ -524,6 +529,8 @@ function initApp() {
       )
         return;
       e.preventDefault();
+
+      // const highestZIndex = 100;
       // Calculate cursor position relative to the element's position from top left
       const offsetX = e.clientX - newDiv.offsetLeft;
       const offsetY = e.clientY - newDiv.offsetTop;
