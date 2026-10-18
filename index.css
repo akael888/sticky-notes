@@ -128,6 +128,7 @@ footer {
 
 body {
     background-color: var(--color-contrast-95);
+    margin: 0;
 }
 
 /* #new-note {left: 200px;} */
