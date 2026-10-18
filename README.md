@@ -10,3 +10,4 @@
 
 ## Other Notes
 - Moving on to other projects (18/10/2026) due to too much time spending on this project while also managing time-consuming work.
+- Will focuses more on UI and UX design in the next iteration.
