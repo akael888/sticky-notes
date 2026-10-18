@@ -9,4 +9,4 @@
 - Search Notes based on Notes Content
 
 ## Other Notes
-- TBA..
+- Moving on to other projects (18/10/2026) due to too much time spending on this project while also managing time-consuming work.
