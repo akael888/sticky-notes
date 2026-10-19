@@ -22,7 +22,7 @@ function initApp() {
   const DEFAULT_NOTE_COLOR = "#ffe9a7";
 
   // Check if there's local storage Data or not before appending to Default Notes
-  let defaultNotes = localStorageNotesData
+  let notes = localStorageNotesData
     ? localStorageNotesData
     : [
         {
@@ -73,21 +73,6 @@ function initApp() {
   const fileInput = defineUploadDataFile();
   const undoButton = defineUndoButton();
 
-  // Filter Notes for Search Note Feature
-  const filterNotes = defaultNotes.filter(
-    (note) => note.notesMsg == newSearchInput.value,
-  );
-
-  // Check which notes data is used for source notes
-  let sourcenotes = newSearchInput.value == "" ? defaultNotes : filterNotes;
-
-  // Defining App Title to Change App Title Based on Notes Count
-  const appTitle = document.getElementById("app-title");
-  // appTitle.innerText =
-  //   defaultNotes.length > 0
-  //     ? appTitle.innerText + " " + "with " + defaultNotes.length + " notes.."
-  //     : appTitle.innerText;
-
   function defineUndoButton() {
     const undoButton = document.createElement("button");
     undoButton.style.display =
@@ -105,9 +90,9 @@ function initApp() {
       if (lastDeleteStack.length === 0) {
         return;
       }
-      defaultNotes.push(lastDeleteStack.pop());
-      sourcenotes = defaultNotes;
-      updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+      notes.push(lastDeleteStack.pop());
+      // sourcenotes = notes;
+      updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
       checkIfNoteDeleted();
       cleanCurrentNotes();
       populateNotes();
@@ -124,7 +109,7 @@ function initApp() {
 
   function defineDownloadData() {
     const link = document.createElement("a");
-    const blobData = new Blob([JSON.stringify(defaultNotes)], {
+    const blobData = new Blob([JSON.stringify(notes)], {
       type: "application/json",
     });
     link.href = URL.createObjectURL(blobData);
@@ -191,9 +176,9 @@ function initApp() {
         }
 
         if (checkFileInput(parsedData)) {
-          defaultNotes = parsedData;
-          updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
-          sourcenotes = newSearchInput.value == "" ? defaultNotes : filterNotes;
+          notes = parsedData;
+          updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
+          // sourcenotes = newSearchInput.value == "" ? notes : filterNotes;
 
           cleanCurrentNotes();
           populateNotes();
@@ -300,18 +285,18 @@ function initApp() {
     newSearchInput.addEventListener("input", (e) => {
       e.preventDefault();
 
-      // alert(newSearchInput.value);
-      if (newSearchInput.value == "") {
-        sourcenotes = defaultNotes;
-      } else {
-        const filterNotes = defaultNotes.filter((note) =>
-          new RegExp(newSearchInput.value, "i").test(note.notesMsg),
-        );
-        sourcenotes = filterNotes;
-      }
+      // // alert(newSearchInput.value);
+      // if (newSearchInput.value == "") {
+      //   // sourcenotes = notes;
+      // } else {
+      //   const filterNotes = notes.filter((note) =>
+      //     new RegExp(newSearchInput.value, "i").test(note.notesMsg),
+      //   );
+      //   // sourcenotes = filterNotes;
+      // }
 
-      console.log(sourcenotes);
-      // alert(sourcenotes);
+      // console.log(sourcenotes);
+      // // alert(sourcenotes);
       cleanCurrentNotes();
       populateNotes();
     });
@@ -324,6 +309,19 @@ function initApp() {
     // });
 
     return newSearchInput;
+  }
+
+  function compareSearchwithNotes() {
+    if (newSearchInput.value != "") {
+      const filterNotes = notes.filter((note) =>
+        note.notesMsg
+          .toLowerCase()
+          .includes(newSearchInput.value.toLowerCase()),
+      );
+      return filterNotes;
+    } else {
+      return notes;
+    }
   }
 
   function getDuration(startDateTime) {
@@ -414,22 +412,18 @@ function initApp() {
       const parentId = parentDiv.id;
       parentDiv.remove();
 
-      const deletedData = defaultNotes.filter(
-        (data) => data.notesID == parentId,
-      );
+      const deletedData = notes.filter((data) => data.notesID == parentId);
       lastDeleteStack.push(deletedData[0]);
       checkIfNoteDeleted();
       // alert(lastDeleteStack);
 
-      const updatedData = defaultNotes.filter(
-        (data) => data.notesID != parentId,
-      );
-      defaultNotes = updatedData;
+      const updatedData = notes.filter((data) => data.notesID != parentId);
+      notes = updatedData;
       // let tempText = "Sticky Dump";
       // appTitle.innerText = null;
       // appTitle.innerText =
-      //   defaultNotes.length > 0
-      //     ? tempText + " " + "with " + defaultNotes.length + " notes.."
+      //   notes.length > 0
+      //     ? tempText + " " + "with " + notes.length + " notes.."
       //     : tempText;
       updateNotesLocalStorage("WEB_DIARY_NOTES", updatedData);
     });
@@ -470,9 +464,7 @@ function initApp() {
           e.areaWidth = width;
           e.areaHeight = height;
           // alert(e.notesID);
-          const changedObject = defaultNotes.find(
-            (note) => note.notesID == e.notesID,
-          );
+          const changedObject = notes.find((note) => note.notesID == e.notesID);
 
           if (changedObject) {
             // alert("changing Object");
@@ -480,9 +472,9 @@ function initApp() {
             changedObject.areaHeight = height;
           }
 
-          sourcenotes = defaultNotes;
+          // sourcenotes = notes;
 
-          updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+          updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
         }
       }
     });
@@ -545,14 +537,14 @@ function initApp() {
         newDiv.style.left = `${newX}px`;
         newDiv.style.top = `${newY}px`;
 
-        const changedNote = defaultNotes.find(
+        const changedNote = notes.find(
           (note) => note.notesID === Number(newDiv.id),
         );
         if (changedNote) {
           changedNote.left = newX;
           changedNote.top = newY;
 
-          updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+          updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
         }
       }
 
@@ -582,23 +574,23 @@ function initApp() {
     });
 
     elements.newTextArea.addEventListener("input", (e) => {
-      const changedNote = sourcenotes.find(
+      const changedNote = notes.find(
         (note) => note.notesID === Number(newDiv.id),
       );
       if (changedNote) {
         changedNote.notesMsg = elements.newTextArea.value;
         elements.newText.innerText = changedNote.notesMsg;
-        updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+        updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
       }
     });
     elements.newColorPicker.addEventListener("input", (e) => {
       newDiv.style.background = e.target.value;
-      const changedNote = defaultNotes.find(
+      const changedNote = notes.find(
         (note) => note.notesID === Number(newDiv.id),
       );
       changedNote.color = e.target.value;
       elements.newColorPicker.style.backgroundColor = e.target.value;
-      updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+      updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
     });
 
     return { newDiv };
@@ -674,9 +666,9 @@ function initApp() {
     };
     // alert(newStickyNote);
     // alert("masuk");
-    defaultNotes.push(newStickyNote);
+    notes.push(newStickyNote);
     updateDefaultNotes(newStickyNote);
-    updateNotesLocalStorage("WEB_DIARY_NOTES", defaultNotes);
+    updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
     newNoteDiv.style.left = `${localStorageNewNoteLocation.left}px`;
     newNoteDiv.style.top = `${localStorageNewNoteLocation.top}px`;
   }
@@ -686,15 +678,10 @@ function initApp() {
   }
 
   function populateNotes() {
-    // alert("t");
-    // console.log("sourcenotes");
+    // Filter Notes Each Time it Populates
+    const searchResult = compareSearchwithNotes();
 
-    // console.log(sourcenotes);
-    // console.log(defaultNotes);
-
-    // console.log("sourcenotes");
-    // alert("x");
-    sourcenotes.forEach((e) => {
+    searchResult.forEach((e) => {
       updateDefaultNotes(e);
     });
   }
