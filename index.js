@@ -248,7 +248,11 @@ function initApp() {
     newNoteButton.addEventListener("click", (e) => {
       e.preventDefault();
       addNewStickyNote(e);
-      newNoteForm.requestSubmit();
+      newNoteTextArea.value = "";
+
+      // newNoteForm.requestSubmit();
+      cleanCurrentNotes();
+      populateNotes();
     });
 
     // Input Note from Enter
@@ -256,7 +260,10 @@ function initApp() {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         addNewStickyNote(e);
-        newNoteForm.requestSubmit();
+        newNoteTextArea.value = "";
+        // newNoteForm.requestSubmit();
+        cleanCurrentNotes();
+        populateNotes();
       }
     });
 
@@ -668,11 +675,12 @@ function initApp() {
     notes.push(newStickyNote);
     updateDefaultNotes(newStickyNote);
     updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
-    newNoteDiv.style.left = `${localStorageNewNoteLocation.left}px`;
-    newNoteDiv.style.top = `${localStorageNewNoteLocation.top}px`;
+
+    newNoteDiv.style.left = `${localStorageNewNoteLocation.left ? localStorageNewNoteLocation.left : 0}px`;
+    newNoteDiv.style.top = `${localStorageNewNoteLocation.top ? localStorageNewNoteLocation.top : 0}px`;
   }
 
-  function cleanCurrentNotes(e) {
+  function cleanCurrentNotes() {
     document.querySelectorAll(".sticky-notes").forEach((el) => el.remove());
   }
 
