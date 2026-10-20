@@ -543,12 +543,11 @@ function initApp() {
         if (changedNote) {
           changedNote.left = newX;
           changedNote.top = newY;
-
-          updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
         }
       }
 
       function pointerUp() {
+        updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
         document.removeEventListener("pointermove", pointerMove);
         document.removeEventListener("pointerup", pointerUp);
       }
