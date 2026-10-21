@@ -248,11 +248,11 @@ function initApp() {
     newNoteButton.addEventListener("click", (e) => {
       e.preventDefault();
       addNewStickyNote(e);
-      newNoteTextArea.value = "";
+      newNoteTextArea.value = null;
 
       // newNoteForm.requestSubmit();
-      cleanCurrentNotes();
-      populateNotes();
+      // cleanCurrentNotes();
+      // populateNotes();
     });
 
     // Input Note from Enter
@@ -260,10 +260,10 @@ function initApp() {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         addNewStickyNote(e);
-        newNoteTextArea.value = "";
+        newNoteTextArea.value = null;
         // newNoteForm.requestSubmit();
-        cleanCurrentNotes();
-        populateNotes();
+        // cleanCurrentNotes();
+        // populateNotes();
       }
     });
 
@@ -509,14 +509,6 @@ function initApp() {
 
     console.log(localStorageNewNoteLocation);
 
-    //events
-    newNoteDiv.style.left = localStorageNewNoteLocation
-      ? `${localStorageNewNoteLocation.left}px`
-      : 0;
-    newNoteDiv.style.top = localStorageNewNoteLocation
-      ? `${localStorageNewNoteLocation.top}px`
-      : 0;
-
     newDiv.addEventListener("pointerdown", (e) => {
       newDiv.style.zIndex = `${highestZIndex + 1}`;
       highestZIndex = highestZIndex + 1;
@@ -659,8 +651,8 @@ function initApp() {
     // e.preventDefault();
     const newNoteDiv = document.getElementById("new-note");
     const postText = document.getElementById("post-text");
-    postText.style.width = "100px";
-    postText.style.height = "100px";
+    // postText.style.width = "100px";
+    // postText.style.height = "100px";
 
     const newStickyNote = {
       notesID: Date.now(),
@@ -676,8 +668,8 @@ function initApp() {
     updateDefaultNotes(newStickyNote);
     updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
 
-    newNoteDiv.style.left = `${localStorageNewNoteLocation.left ? localStorageNewNoteLocation.left : 0}px`;
-    newNoteDiv.style.top = `${localStorageNewNoteLocation.top ? localStorageNewNoteLocation.top : 0}px`;
+    newNoteDiv.style.left = `${localStorageNewNoteLocation?.left ?? 0}px`;
+    newNoteDiv.style.top = `${localStorageNewNoteLocation?.top ?? 0}px`;
   }
 
   function cleanCurrentNotes() {
@@ -727,6 +719,19 @@ function initApp() {
   function startApp() {
     // Appending to the Main Board
     mainBoard.appendChild(newNoteDiv);
+
+    //events
+    newNoteDiv.style.left = `${
+      localStorageNewNoteLocation
+        ? localStorageNewNoteLocation.left
+        : newNoteDiv.parentElement.clientWidth / 2 - newNoteDiv.offsetWidth / 2
+    }px`;
+    newNoteDiv.style.top = `${
+      localStorageNewNoteLocation
+        ? localStorageNewNoteLocation.top
+        : newNoteDiv.parentElement.clientHeight / 2 -
+          newNoteDiv.offsetHeight / 2
+    }px`;
 
     const optionDiv = document.createElement("div");
     const appTitle = document.createElement("h1");
