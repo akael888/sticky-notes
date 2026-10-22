@@ -625,6 +625,8 @@ function initApp() {
 
         newNoteDiv.style.left = `${newX}px`;
         newNoteDiv.style.top = `${newY}px`;
+        // newNoteLocation.left = newX;
+        // newNoteLocation.top = newY;
 
         const newNoteLocation = {
           left: newX,
@@ -659,14 +661,20 @@ function initApp() {
       notesMsg: postText.value,
       notesTimeStamp: Date.now(),
       left: newNoteDiv.style.left.split("px")[0],
-      top: newNoteDiv.style.top.split("px")[0] - 100,
+      top: newNoteDiv.style.top.split("px")[0],
       color: DEFAULT_NOTE_COLOR,
     };
     // alert(newStickyNote);
     // alert("masuk");
     notes.push(newStickyNote);
-    updateDefaultNotes(newStickyNote);
     updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
+    updateDefaultNotes(newStickyNote);
+    newSearchInput.value = "";
+    populateNotes();
+
+    const localStorageNewNoteLocation = JSON.parse(
+      localStorage.getItem("NEW_NOTES_LOCATION"),
+    );
 
     newNoteDiv.style.left = `${localStorageNewNoteLocation?.left ?? 0}px`;
     newNoteDiv.style.top = `${localStorageNewNoteLocation?.top ?? 0}px`;
