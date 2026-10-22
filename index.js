@@ -492,7 +492,7 @@ function initApp() {
   }
 
   function defineNewDiv(e, elements) {
-    // a Div to Contain All Sticky Notes Element
+    // a Div to Contain Al.l Sticky Notes Element
 
     const newDiv = document.createElement("div");
     newDiv.className = "sticky-notes";
@@ -668,9 +668,16 @@ function initApp() {
     // alert("masuk");
     notes.push(newStickyNote);
     updateNotesLocalStorage("WEB_DIARY_NOTES", notes);
-    updateDefaultNotes(newStickyNote);
-    newSearchInput.value = "";
-    populateNotes();
+
+    if (newSearchInput.value != "") {
+      // If we are already searching certain stuff
+      cleanCurrentNotes();
+      newSearchInput.value = "";
+      populateNotes();
+    } else {
+      // Default behaviour
+      updateDefaultNotes(newStickyNote);
+    }
 
     const localStorageNewNoteLocation = JSON.parse(
       localStorage.getItem("NEW_NOTES_LOCATION"),
