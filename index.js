@@ -243,21 +243,28 @@ function initApp() {
     const newNoteButton = document.createElement("button");
     newNoteButton.id = "post-button";
     newNoteButton.textContent = "+";
+    // newNoteButton.disabled = true;
 
     // Add Input Note Button
     newNoteButton.addEventListener("click", (e) => {
       e.preventDefault();
-      addNewStickyNote(e);
-      newNoteTextArea.value = null;
+      if (newNoteTextArea.value.trim() != "") {
+        addNewStickyNote(e);
+        newNoteTextArea.value = null;
 
-      // newNoteForm.requestSubmit();
-      // cleanCurrentNotes();
-      // populateNotes();
+        // newNoteForm.requestSubmit();
+        // cleanCurrentNotes();
+        // populateNotes();
+      }
     });
 
     // Input Note from Enter
     newNoteTextArea.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" && !e.shiftKey) {
+      if (
+        e.key === "Enter" &&
+        !e.shiftKey &&
+        newNoteTextArea.value.trim() != ""
+      ) {
         e.preventDefault();
         addNewStickyNote(e);
         newNoteTextArea.value = null;
@@ -658,7 +665,7 @@ function initApp() {
 
     const newStickyNote = {
       notesID: Date.now(),
-      notesMsg: postText.value,
+      notesMsg: String(postText.value).trim(),
       notesTimeStamp: Date.now(),
       left: newNoteDiv.style.left.split("px")[0],
       top: newNoteDiv.style.top.split("px")[0],
