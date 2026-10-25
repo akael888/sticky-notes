@@ -132,6 +132,11 @@ function initApp() {
       setTimeout(() => {
         URL.revokeObjectURL(link.href);
       }, 200);
+
+      const newblobData = new Blob([JSON.stringify(notes)], {
+        type: "application/json",
+      });
+      link.href = URL.createObjectURL(newblobData);
     });
 
     link.addEventListener("mouseenter", () => {
