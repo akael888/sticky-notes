@@ -260,17 +260,15 @@ function initApp() {
 
     // Input Note from Enter
     newNoteTextArea.addEventListener("keydown", function (e) {
-      if (
-        e.key === "Enter" &&
-        !e.shiftKey &&
-        newNoteTextArea.value.trim() != ""
-      ) {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        addNewStickyNote(e);
-        newNoteTextArea.value = null;
-        // newNoteForm.requestSubmit();
-        // cleanCurrentNotes();
-        // populateNotes();
+        if (newNoteTextArea.value.trim() != "") {
+          addNewStickyNote(e);
+          newNoteTextArea.value = null;
+          // newNoteForm.requestSubmit();
+          // cleanCurrentNotes();
+          // populateNotes();
+        }
       }
     });
 
