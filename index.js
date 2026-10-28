@@ -34,6 +34,7 @@ function initApp() {
           color: DEFAULT_NOTE_COLOR,
           areaWidth: 100,
           areaHeight: 100,
+          zIndex: 100,
         },
         {
           notesID: 1,
@@ -45,6 +46,7 @@ function initApp() {
           color: DEFAULT_NOTE_COLOR,
           areaWidth: 100,
           areaHeight: 100,
+          zIndex: 100,
         },
         {
           notesID: 2,
@@ -55,6 +57,7 @@ function initApp() {
           color: DEFAULT_NOTE_COLOR,
           areaWidth: 100,
           areaHeight: 100,
+          zIndex: 100,
         },
       ];
 
@@ -510,6 +513,7 @@ function initApp() {
     newDiv.style.left = `${e.left}px`;
     newDiv.style.top = `${e.top}px`;
     newDiv.style.background = e.color;
+    newDiv.style.zIndex = e.zIndex;
 
     newDiv.appendChild(elements.newDateText);
     newDiv.appendChild(elements.newTextArea);
@@ -520,7 +524,12 @@ function initApp() {
     console.log(localStorageNewNoteLocation);
 
     newDiv.addEventListener("pointerdown", (e) => {
+      const changedNote = notes.find(
+        (note) => note.notesID === Number(newDiv.id),
+      );
+
       newDiv.style.zIndex = `${highestZIndex + 1}`;
+      changedNote.zIndex = newDiv.style.zIndex;
       highestZIndex = highestZIndex + 1;
 
       if (
@@ -546,9 +555,6 @@ function initApp() {
         newDiv.style.left = `${newX}px`;
         newDiv.style.top = `${newY}px`;
 
-        const changedNote = notes.find(
-          (note) => note.notesID === Number(newDiv.id),
-        );
         if (changedNote) {
           changedNote.left = newX;
           changedNote.top = newY;
