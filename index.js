@@ -16,9 +16,6 @@ function initApp() {
     localStorage.getItem("NEW_NOTES_LOCATION"),
   );
 
-  // Track Highest Index to Put which notes to the front
-  let highestZIndex = 100;
-
   const DEFAULT_NOTE_COLOR = "#ffe9a7";
 
   // Check if there's local storage Data or not before appending to Default Notes
@@ -62,6 +59,10 @@ function initApp() {
       ];
 
   let lastDeleteStack = [];
+
+  // Track Highest Index to Put which notes to the front
+  let highestZIndex = checkHighestZIndex();
+
   // Get Main Board
   const mainBoard = document.getElementById("main-board");
 
@@ -513,7 +514,7 @@ function initApp() {
     newDiv.style.left = `${e.left}px`;
     newDiv.style.top = `${e.top}px`;
     newDiv.style.background = e.color;
-    newDiv.style.zIndex = e.zIndex;
+    newDiv.style.zIndex = `${e.zIndex}`;
 
     newDiv.appendChild(elements.newDateText);
     newDiv.appendChild(elements.newTextArea);
@@ -530,7 +531,7 @@ function initApp() {
 
       newDiv.style.zIndex = `${highestZIndex + 1}`;
       changedNote.zIndex = newDiv.style.zIndex;
-      highestZIndex = highestZIndex + 1;
+      highestZIndex = checkHighestZIndex();
 
       if (
         e.target === elements.newTextArea ||
@@ -745,6 +746,12 @@ function initApp() {
       return;
     }
     localStorage.setItem(storageID, JSON.stringify(input));
+  }
+
+  function checkHighestZIndex() {
+    const zIndexList = notes.map((note) => note.zIndex);
+    const value = zIndexList.length > 0 ? Math.max(...zIndexList) : 0;
+    return value;
   }
 
   function startApp() {
